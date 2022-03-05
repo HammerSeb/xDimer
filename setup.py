@@ -2,7 +2,7 @@ from gettext import find
 from setuptools import setup, find_packages
 
 setup(name='XDimer',
-      version=0.0.1,
+      version='0.0.1',
       description='Simulation of multi molecular emission spectra dominated by intermolecular vibrations ',
       long_description=open('README.txt').read(),
       author='Sebastian Hammer',
