@@ -2,6 +2,7 @@
 xdimer package
 """
 
+
 class dimer_system():
     """
     this class defines a dimer system with its attributes such as 
@@ -28,3 +29,6 @@ class dimer_system():
         """returns vibrational energy of ground state from xs parameter"""
         pass
 
+
+if __name__ == '__main__':
+    print('xdimer module called')
