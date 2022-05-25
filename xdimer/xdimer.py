@@ -5,12 +5,8 @@ import math as m
 import numpy as np
 
 from . import semiclassical
+from . import quantummechanical
 from .emission import boltzmann_distribution
-
-class xDimerModeError(Exception):
-    """
-    Raised if instance of dimer_system class is created using an unknown setup mode
-    """
 
 class dimer_system():
     """
@@ -124,6 +120,64 @@ def semiclassical_emission(E, temp, dimer):
         return out
     else:
         return out[temp[0]]
+
+def quantummechanical_emission(E, temp, dimer, simulation_parameters = [5, -1, 1, 10000, 90]):
+    quantummechanical.franck_condon_factor()
+    
+    if isinstance(dimer, xdimer.dimer_system):
+        gs_parameter = dimer.gs_parameter
+        xs_parameter = dimer.xs_parameter
+        e_offset = dimer.e_offset
+        q_xs = dimer.q_xs
+        xs_vib_energy = dimer.xs_vib_energy
+
+    else:
+        gs_parameter = dimer[0]
+        xs_parameter = dimer[1]
+        e_offset = dimer[2]
+        q_xs = dimer[3]
+        
+        #calculate vibrational energy from oscillator constant
+        hJ = 1.0456e-34 # hbar in J/s
+        eCharge = 1.6022e-19 # elementary charge 
+
+        xs_vib_energy =  (hj**2/dimer[4])*(xs_parameter*1e-20)/eCharge
+
+
+    if type(temp) is list:
+        list_flag = True
+    else:
+        temp = [temp]
+        list_flag = False
+    
+    boltzmann_dist = boltzmann_distribution(temp, 0.5*xs_vib_energy)
+    for T in temp:
+        for n in range(simulation_parameters[0]):
+            pass
+
+    # Export = E  
+    # for T in Temperature:
+        
+    #     Spec=np.zeros((n_Sim+1,len(E)))
+        
+    #     for n in range(n_Sim):
+    #         spectra = level_emission(n,a_exc,a_GS,qe,De,mass)
+    #         S = np.zeros(len(E))
+            
+    #         for i in range(len(spectra[0])):
+    #             S += gauss(E,spectra[2,i],w,spectra[1,i])
+    #         Spec[n] = Boltzmann_occupation(n,T,a_exc)*S
+    
+    #     Spec[n_Sim]=np.sum(Spec[0:n_Sim],axis=0)
+    
+    #     Export = np.vstack((Export, Spec[n_Sim]))
+    #     print('{run}: {T} K done'.format(run = run[idx], T=T)) 
+
+class xDimerModeError(Exception):
+    """
+    Raised if instance of dimer_system class is created using an unknown setup mode
+    """
+
 
 
 if __name__ == '__main__':

@@ -2,7 +2,6 @@ import math as m
 import numpy as np
 
 
-
 def excited_state_energy(n,vib_zero_point_energy,e_offset):
     """
     Auxillary function for semi-classical emission spectra

@@ -28,3 +28,17 @@ def boltzmann_distribution(Temp_list, vib_zero_point_energy, no_of_states= 50):
             p.append(m.exp(-n*2*vib_zero_point_energy/(kb*T))/Z)
         P[T] = np.vstack((N,p))
     return P
+
+def gauss(x, A, w, xc):
+    """
+    gauss function as line shape function
+    Args:
+        x (ndarray): x-values
+        A (Float): area under the curve
+        w (Float): standard deviation
+        xc (Float): x center
+
+    Returns:
+       nadarry: function values at x-values
+    """
+    return A/m.sqrt(2*m.pi*w**2)*np.exp(-(x-xc)**2/(2*w**2))

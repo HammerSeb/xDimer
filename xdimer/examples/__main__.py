@@ -1,9 +1,7 @@
 import sys
 from .. import xdimer
-from ..emission import boltzmann_distribution
 from .. import semiclassical as sc
 import numpy as np
-import scipy.integrate as integ
 from matplotlib import pyplot as plt
 
 if __name__ == '__main__':
@@ -12,7 +10,7 @@ if __name__ == '__main__':
 
     # Set up dimer system with reduced mass 0.5*577.916u (ZnPc dimer), ground state vibrational energy 22 meV, excited state displaced by 0.1 Angstrom, with vibrational energy 26 meV and an energetic offset of 1.5 eV
     dimer = xdimer.dimer_system(577.916/2, .022, .030, 0.1, 1.55)
-
+    
     # generate energy axis
     energy_axis = np.linspace(1,1.8, num=500)
 
