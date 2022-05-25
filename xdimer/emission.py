@@ -7,7 +7,7 @@ def boltzmann_distribution(Temp_list, vib_zero_point_energy, no_of_states= 50):
 
     Args:
         Temp_list (list of Floates): list of temperature values in Kelvin 
-        vib_zero_point_energy (_type_): vibrational zero point energy in eV_
+        vib_zero_point_energy (_type_): vibrational zero point energy in eV
         No_of_states (int, optional): number of simulated excited states for canocial partion sum. Defaults to 50.
 
     Returns:

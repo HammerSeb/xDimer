@@ -4,7 +4,7 @@ xdimer package
 import math as m
 import numpy as np
 
-from .xdimer import semiclassical
+from . import semiclassical
 from .emission import boltzmann_distribution
 
 class xDimerModeError(Exception):
@@ -104,19 +104,19 @@ def semiclassical_emission(E, temp, dimer):
         temp = [temp]
         list_flag = False
     
-    boltzmann_dist = boltzmann_distribution(temp)
+    boltzmann_dist = boltzmann_distribution(temp, 0.5*dimer.xs_vib_energy)
 
-    out = dict
+    out = dict()
     for T in temp:
         spectra = np.zeros((8,np.size(E)))
         spectra[0] = E
         spectra[1] = boltzmann_dist[T][1,0]*semiclassical.xdimer_sc_emission_0(E, dimer.gs_potential, dimer.xs_parameter, 0.5*dimer.xs_vib_energy, dimer.e_offset, dimer.q_xs)
-        spectra[2] = boltzmann_dist[T][1,0]*semiclassical.xdimer_sc_emission_1(E, dimer.gs_potential, dimer.xs_parameter, 0.5*dimer.xs_vib_energy, dimer.e_offset, dimer.q_xs)
-        spectra[3] = boltzmann_dist[T][1,0]*semiclassical.xdimer_sc_emission_2(E, dimer.gs_potential, dimer.xs_parameter, 0.5*dimer.xs_vib_energy, dimer.e_offset, dimer.q_xs)
-        spectra[4] = boltzmann_dist[T][1,0]*semiclassical.xdimer_sc_emission_3(E, dimer.gs_potential, dimer.xs_parameter, 0.5*dimer.xs_vib_energy, dimer.e_offset, dimer.q_xs)
-        spectra[5] = boltzmann_dist[T][1,0]*semiclassical.xdimer_sc_emission_4(E, dimer.gs_potential, dimer.xs_parameter, 0.5*dimer.xs_vib_energy, dimer.e_offset, dimer.q_xs)
-        spectra[6] = boltzmann_dist[T][1,0]*semiclassical.xdimer_sc_emission_5(E, dimer.gs_potential, dimer.xs_parameter, 0.5*dimer.xs_vib_energy, dimer.e_offset, dimer.q_xs)
-        spectra[7] = boltzmann_dist[T][1,0]*semiclassical.xdimer_sc_total_emission(E, dimer.gs_potential, dimer.xs_parameter, 0.5*dimer.xs_vib_energy, dimer.e_offset, dimer.q_xs, boltzmann_dist, T)
+        spectra[2] = boltzmann_dist[T][1,1]*semiclassical.xdimer_sc_emission_1(E, dimer.gs_potential, dimer.xs_parameter, 0.5*dimer.xs_vib_energy, dimer.e_offset, dimer.q_xs)
+        spectra[3] = boltzmann_dist[T][1,2]*semiclassical.xdimer_sc_emission_2(E, dimer.gs_potential, dimer.xs_parameter, 0.5*dimer.xs_vib_energy, dimer.e_offset, dimer.q_xs)
+        spectra[4] = boltzmann_dist[T][1,3]*semiclassical.xdimer_sc_emission_3(E, dimer.gs_potential, dimer.xs_parameter, 0.5*dimer.xs_vib_energy, dimer.e_offset, dimer.q_xs)
+        spectra[5] = boltzmann_dist[T][1,4]*semiclassical.xdimer_sc_emission_4(E, dimer.gs_potential, dimer.xs_parameter, 0.5*dimer.xs_vib_energy, dimer.e_offset, dimer.q_xs)
+        spectra[6] = boltzmann_dist[T][1,5]*semiclassical.xdimer_sc_emission_5(E, dimer.gs_potential, dimer.xs_parameter, 0.5*dimer.xs_vib_energy, dimer.e_offset, dimer.q_xs)
+        spectra[7] = semiclassical.xdimer_sc_total_emission(E, dimer.gs_potential, dimer.xs_parameter, 0.5*dimer.xs_vib_energy, dimer.e_offset, dimer.q_xs, boltzmann_dist, T)
 
         out[T] = spectra
     

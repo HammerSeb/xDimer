@@ -54,7 +54,7 @@ def xdimer_sc_emission_0(E, gs_potential, xs_parameter ,vib_zero_point_energy, e
     Returns:
         ndarray: size: size(E). emission intensity with respect to values of E. nan-values resulting from E-values greater than singularity are set to 0 to ensure down the line usability
     """
-    return np.nan_to_num(0.5*np.sqrt(xs_parameter/(m.pi*gs_potential*(excited_state_energy(0,vib_zero_point_energy,e_offset))-E))*np.exp(-xs_parameter*displacement_from_energy(E, 0, gs_potential, vib_zero_point_energy, e_offset, q_xs)**2))
+    return np.nan_to_num(0.5*np.sqrt(xs_parameter/(m.pi*gs_potential*(excited_state_energy(0, vib_zero_point_energy, e_offset)-E)))*np.exp(-xs_parameter*displacement_from_energy(E, 0, gs_potential, vib_zero_point_energy, e_offset, q_xs)**2))
 
 def xdimer_sc_emission_1(E, gs_potential, xs_parameter ,vib_zero_point_energy, e_offset, q_xs):
     """
