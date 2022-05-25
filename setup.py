@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(name='XDimer',
       version='0.0.1',
-      description='Simulation of multi molecular emission spectra dominated by intermolecular vibrations ',
+      description='Simulation of multi molecular emission spectra dominated by inter-molecular vibrations ',
       long_description=open('README.txt').read(),
       author='Sebastian Hammer',
       author_email='sebastian.hammer@mail.mcgill.ca',
