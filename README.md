@@ -8,14 +8,14 @@ Pyhton package for the simulation of  multi-molecular emission spectra dominated
 3. API reference guide
 4. License and citation
 
-## Installation
+## 1. Installation
 
-## Basic introduction
+## 2. Basic introduction
 
-## API reference guide
+## 3. API reference guide
 
-## License and citation
+## 4. License and citation
 
-# License
+### License
 
-# Citation
+### Citation
