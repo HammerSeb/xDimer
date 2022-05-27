@@ -29,7 +29,7 @@ def boltzmann_distribution(Temp_list, vib_zero_point_energy, no_of_states= 50):
         P[T] = np.vstack((N,p))
     return P
 
-def gauss(x, A, w, xc):
+def gauss_lineshape(x, A, w, xc):
     """
     gauss function as line shape function
     Args:

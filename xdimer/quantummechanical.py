@@ -20,7 +20,7 @@ def harmonic_oscillator_wavefunction(level, spatial_coordinate, oscillator_param
     
     return (oscillator_parameter/np.pi)**(1/4)*1/np.sqrt(float(2**level*m.factorial(level)))*Herm(level,np.sqrt(oscillator_parameter)*spatial_coordinate)*np.exp(-0.5*oscillator_parameter*spatial_coordinate**2)
 
-def franck_condon_factor(level, xs_parameter, gs_parameter, xs_q, e_offset, mass, q_low= -1, q_high= 1, dq= 10000, n_gs= 90):
+def franck_condon_factor(level, xs_parameter, gs_parameter, q_xs, e_offset, mass, q_low= -.5, q_high= .5, dq= 10000, n_gs= 25):
     """
     numerically calculates  emissionenergies and respective Franck-Condon factors for the emission from an vibrational level (given by 'level') of an excited state oscillator to the vibrational levels of a ground state harmonical oscillator
 
@@ -28,7 +28,7 @@ def franck_condon_factor(level, xs_parameter, gs_parameter, xs_q, e_offset, mass
         level (Int): oscillator quantum number
         xs_parameter (Float): excited state oscillator parameter alpha in 1/Angstrom**2
         gs_parameter (Float): ground state oscillator parameter alpha in 1/Angstrom**2
-        xs_q (_type_): spatial displacement of excited state with respect to the ground state minimum in Angstrom
+        q_xs (_type_): spatial displacement of excited state with respect to the ground state minimum in Angstrom
         e_offset (_type_): energetic offset with respect to ground state minimum in eV
         mass (_type_): mass of the dimer system in kg
         ### Simulation parameters - optional
@@ -61,8 +61,8 @@ def franck_condon_factor(level, xs_parameter, gs_parameter, xs_q, e_offset, mass
     
    
     for k in range(n_gs):
-        out[0,k] = (level, k)
+        out[0,k] = k
         out[1,k] = Em_Energy(k)
-        out[2,k] = np.abs(integ.simps(harmonic_oscillator_wavefunction(k, Q, gs_parameter)*harmonic_oscillator_wavefunction(level, Q-xs_q, xs_parameter)))**2
+        out[2,k] = np.abs(integ.simps(harmonic_oscillator_wavefunction(k, Q, gs_parameter)*harmonic_oscillator_wavefunction(level, Q-q_xs, xs_parameter), Q))**2
               
     return out
