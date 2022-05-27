@@ -53,7 +53,7 @@ if __name__ == '__main__':
     ### Plotting data
     energy_axis = np.linspace(1,2, num=1000)
     figure = plt.figure(figsize= (8,8))
-    figure.suptitle(f'Ex,vib = {round(dimer_fitted.xs_vib_energy*1e3,1)} meV, Eg,vib = {round(dimer_fitted.gs_vib_energy*1e3,1)} meV, De = {round(dimer_fitted.e_offset,2)} eV, sigma = {round(dimer_fitted.energetic_broadening*1e3,1)} meV')
+    figure.suptitle(f'Fit results: \n Ex,vib = {round(dimer_fitted.xs_vib_energy*1e3,1)} meV, Eg,vib = {round(dimer_fitted.gs_vib_energy*1e3,1)} meV, De = {round(dimer_fitted.e_offset,2)} eV, sigma = {round(dimer_fitted.energetic_broadening*1e3,1)} meV')
     ax = figure.subplots(2,2).flatten()
     ymax = data_set[min(temperatures)][1].max() + 0.15*data_set[min(temperatures)][1].max() 
     for idx, T in enumerate(temperatures):
