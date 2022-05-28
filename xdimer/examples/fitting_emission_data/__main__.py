@@ -1,7 +1,4 @@
-import sys
 import xdimer
-import pickle
-import time
 import numpy as np
 import math as m
 from scipy.optimize import least_squares
@@ -37,16 +34,11 @@ if __name__ == '__main__':
     # fitting procedure
     print('fitting. this might take a while')
     initial_guess = [2650, 2250, 0.1, 1.6, 0.025]
-    start = time.time()
     fit_results = least_squares(qm_residual, initial_guess, bounds= ((2500, 2000, 0.05, 1.5, 0.015), (2750, 2450, 0.2, 1.65, 0.1)))
-    print(f'fitting took {time.time() - start} s')
-    
-    dimer_fitted = xdimer.dimer_system(400, *fit_results['x'], 'osc_para')
-    
-    print('fit restuls')
-    print(fit_results['x'])
 
     
+    dimer_fitted = xdimer.dimer_system(400, *fit_results['x'], 'osc_para')
+      
     
     colors_plot = ['blueviolet', 'skyblue', 'darkorange', 'forestgreen', 'red', 'aqua', 'fuchsia']
 
