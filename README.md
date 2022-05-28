@@ -10,6 +10,12 @@ Pyhton package for the simulation of  multi-molecular emission spectra dominated
 
 ## 1. Installation
 
+The latest development version is available on GitHub. To install:
+
+`pyhton -m pip install git+https://github.com/HammerSeb/xDimer.git`
+
+
+
 ## 2. Basic introduction
 
 ## 3. API reference guide
