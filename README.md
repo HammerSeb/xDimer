@@ -60,7 +60,7 @@ where `E` is of `ndarray`-type and defines the energy-axis over which the energy
 >
 >`emission[7]` total emission spectrum as sum over all emissions from the first 6 vibrational levels of the excited state
 >
->**For a list temperature values temp=\[T1, T2, T3, ...\]**
+>**For a list temperature values `temp=\[T1, T2, T3, ...\]`** 
 >`emission` is a dictionary with keys T1, T2, T3, ... . Each entry contains an array for a single temperature value as described above. 
 
 The quantummechanical emission is calculated by 
