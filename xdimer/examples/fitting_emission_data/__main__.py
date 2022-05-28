@@ -1,5 +1,5 @@
 import sys
-from xdimer import xdimer
+import xdimer
 import pickle
 import time
 import numpy as np

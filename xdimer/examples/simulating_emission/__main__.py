@@ -1,5 +1,5 @@
 import sys
-from xdimer import xdimer
+import xdimer
 from xdimer import semiclassical as sc
 import numpy as np
 import math as m
