@@ -193,6 +193,12 @@ python -m xdimer.examples.fitting_emission_data
 
 #### quantummechanical_emission
 
+### 3.2 semiclassical
+
+### 3.3 quantummechanical
+
+### 3.4 emission
+
 
 ## 4. License and citation
 
