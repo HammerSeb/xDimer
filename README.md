@@ -23,10 +23,9 @@ This package enables the quick simulation of emission spectra from Franck-Condon
 
 ### 2.1 Model and defintions
 
-The emission spectra are modeled as Franck-Condon transition between two displaced harmonic oscillators. They are characterized by their **reduced mass** $\mu$ and their potential curve
-$\begin{equation*}
-R(q) = R q^2
-\end{equation*}$
+The emission spectra are modeled as Franck-Condon transition between two displaced harmonic oscillators. They are characterized by their 
+$$R(q) = R q^2$$
+
 with $q$ as the spatial generalized coordinate and the
 > **oscillator constant** $R$.
 
@@ -40,15 +39,11 @@ and the
 
 via the reduced mass as
 
-$\begin{equation*}
-R = \frac{\mu}{\hbar^2}E_{vib}^2 
-\end{equation*}$
+$$R = \frac{\mu}{\hbar^2}E_{vib}^2 $$
 
 and 
 
-$\begin{equation*}
-\alpha = \frac{\mu}{\hbar^2}E_{vib} .
-\end{equation*}$
+$$\alpha = \frac{\mu}{\hbar^2}E_{vib} .$$
 
 The oscillators are displaces in energy by the
 > **energetic offset** $D_e$
