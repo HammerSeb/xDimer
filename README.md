@@ -70,6 +70,8 @@ Variable names are declare throughtout the package as follows:
 > `q_xs` : spatial displacement along generalized coordinate
 >
 > `e_offset` : energetic offset of the oscillators
+>
+>`mass` : reduced mass of the system in atomic units u
 
 For the simulation quantummechanical emission the energetic broadening of the underlying lineshape function is declared as
 > `energetic_broadening`
@@ -184,14 +186,30 @@ python -m xdimer.examples.fitting_emission_data
 
 
 ## 3. API reference guide
+API reference guide for all classes and functions available.
 
 ### 3.1 xdimer 
+Base functionality of the package containing the `dimer_system` class, the functions `semiclassical_emission` and `quantummechanical_emission` and the exception `xDimerModeError`. Import by
+```python
+import xdimer
+```
 
 #### dimer_system
+
+Class defining a dimer system containing all defining physical quantities. Instances are created via
+```python
+dimer_system(mass, gs, xs, q_xs, e_offset, energtic_broadening, setup_mode)
+```
+`mass`, `q_xs` and `e_offset` are the reduced mass (in atomoic units), the spatial displacement (in Angstrom) and the energetic offset (in eV), respectively. 
+
+`energetic_broadening`  defines the line width parameter used for the     
+
 
 #### semiclassical_emission
 
 #### quantummechanical_emission
+
+#### Errors and Exceptions
 
 ### 3.2 semiclassical
 
