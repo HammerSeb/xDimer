@@ -6,7 +6,7 @@ import numpy as np
 
 from . import semiclassical
 from . import quantummechanical
-from . import emission
+from . import auxiliary
 
 class dimer_system():
     """
@@ -131,7 +131,7 @@ def semiclassical_emission(E, temp, dimer):
         temp = [temp]
         list_flag = False
     
-    boltzmann_dist = emission.boltzmann_distribution(temp, 0.5*dimer.xs_vib_energy)
+    boltzmann_dist = auxiliary.boltzmann_distribution(temp, 0.5*dimer.xs_vib_energy)
 
     out = dict()
     for T in temp:
@@ -205,7 +205,7 @@ def quantummechanical_emission(E, temp, dimer, simulation_parameters = [5, -.5, 
         temp = [temp]
         list_flag = False
     
-    boltzmann_dist = emission.boltzmann_distribution(temp, 0.5*xs_vib_energy)
+    boltzmann_dist = auxiliary.boltzmann_distribution(temp, 0.5*xs_vib_energy)
     # initializing ouput variables
     
 
@@ -220,7 +220,7 @@ def quantummechanical_emission(E, temp, dimer, simulation_parameters = [5, -.5, 
             FC_factors = quantummechanical.franck_condon_factor(n, xs_parameter, gs_parameter, q_xs, e_offset, mass, simulation_parameters[1], simulation_parameters[2], simulation_parameters[3], simulation_parameters[4])
             spectra_stick.append(np.vstack((FC_factors[0:2], boltzmann_dist[T][1,n]*FC_factors[2])))
             for transition in range(simulation_parameters[4]):
-                spectra_smooth[n] += emission.gauss_lineshape(E, spectra_stick[n][2, transition], energetic_broadening, spectra_stick[n][1, transition])
+                spectra_smooth[n] += auxiliary.gauss_lineshape(E, spectra_stick[n][2, transition], energetic_broadening, spectra_stick[n][1, transition])
         
         spectrum_full = np.vstack((E, spectra_smooth, spectra_smooth.sum(axis=0)))
         spectrum[T] = [spectrum_full, spectra_stick]
