@@ -151,7 +151,7 @@ def xdimer_sc_total_emission(E, gs_potential, xs_parameter ,vib_zero_point_energ
         vib_zero_point_energy (Float): vibrational zero point energy in eV
         e_offset (Float): energetic offset with respect to ground state minimum in eV
         q_xs (Float): spatial displacement of excited state with respect to the ground state minimum in Angstrom
-        boltzmann_dist (Dict): Boltzman distribution generated with xdimer.emission.boltzmann_distribution
+        boltzmann_dist (Dict): Boltzman distribution generated with xdimer.auxiliary.boltzmann_distribution
         temp (Float): Temperature in Kelvin - must be key in dictionary boltzmann_dist
 
     Returns:

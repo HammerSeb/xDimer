@@ -1,0 +1,5 @@
+# ignore onedrive .stats files
+*.stats
+
+#ingone vscode debugging json
+**/.vscode
