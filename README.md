@@ -1,4 +1,5 @@
 # xDimers
+***This package is currently beta tested and cleaned up for publication***
 
 Pyhton package for simulating multi-molecular emission spectra dominated by a single effective intermolecular vibrational mode. This package accompanies the publication in ...
 
