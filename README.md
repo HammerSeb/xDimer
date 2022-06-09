@@ -360,7 +360,7 @@ Subclass of Exception. Raised if instance of dimer_system class is created using
 ```python
 excited_state_energy(n,vib_zero_point_energy,e_offset)
 ```
-Auxillary function for semi-classical emission spectra. Calculates excited state energy of vibrational level n with respect to ground state minimum in eV. Equation (5) in publication
+auxiliary function for semi-classical emission spectra. Calculates excited state energy of vibrational level n with respect to ground state minimum in eV. Equation (5) in publication
 
 ***Arguments:***
 >`n `(int): vibrational level n
@@ -376,7 +376,7 @@ Auxillary function for semi-classical emission spectra. Calculates excited state
 ```python
 displacement_from_energy(E, n, gs_potential, vib_zero_point_energy, e_offset, q_xs):
 ```
-Auxillary function for semi-classical emission spectra. Inverse function of the emission energy - spatial coordinate relation. Calculates spatial displacement as function of photon energy for emission from the excited state at vibrational level `n` in Angstrom. Equation (S4) in electronic supplementary information.
+auxiliary function for semi-classical emission spectra. Inverse function of the emission energy - spatial coordinate relation. Calculates spatial displacement as function of photon energy for emission from the excited state at vibrational level `n` in Angstrom. Equation (S4) in electronic supplementary information.
 ***Arguments:***
 > `E` (ndarray): photon emission energy in eV
 >
@@ -393,19 +393,163 @@ Auxillary function for semi-classical emission spectra. Inverse function of the 
 >ndarray: spatial displacement in Angstrom
 
 #### xdimer_sc_emission
+There six numbered functions from i= [0 to 5] which calculate the semi-classical emission spectrum from the i-th vibrational level of the excited state. The emission from the ground state is disccused here exemplarily. 
+```python
+xdimer_sc_emission_0(E, gs_potential, xs_parameter ,vib_zero_point_energy, e_offset, q_xs)
+```
+Semi-classical X-dimer emission spectrum from the vibrational ground state
 
+***Arguments:***
+>`E` (ndarray): photon emission energy in eV
+>
+>`gs_potential` (Float): oscillator constant R_0 of the ground state potential in eV/Angstrom**2
+>
+>`xs_parameter` (Float): oscillator parameter of excited state quantum-mechanical oscillator in 1/Angstrom**2 (alpha in manuscript)
+>
+>`vib_zero_point_energy` (Float): vibrational zero point energy in eV
+>
+>`e_offset` (Float): energetic offset with respect to ground state minimum in eV
+>
+>`q_xs` (Float): spatial displacement of excited state with respect to the ground state minimum in Angstrom
+
+***Returns:***
+>ndarray: size: size(E). emission intensity with respect to values of E. **nan-values resulting from E-values greater than singularity are set to 0 to ensure down the line usability.**
+
+For higher vibrational levels use `xdimer_sc_emission_1`, `xdimer_sc_emission_2`, `xdimer_sc_emission_3`, `xdimer_sc_emission_4` and `xdimer_sc_emission_5`.
+
+#### xdimer_sc_total_emission
+```python 
+xdimer_sc_total_emission(E, gs_potential, xs_parameter ,vib_zero_point_energy, e_offset, q_xs, boltzmann_dist, temp)
+```
+Semi-classical X-dimer emission spectrum at temperature "temp" considering the first six vibrational levels of the excited state oscillator
+
+***Arguments:***
+>`E` (ndarray): photon emission energy in eV
+>
+>`gs_potential` (Float): oscillator constant R_0 of the ground state potential in eV/Angstrom**2
+>
+>`xs_parameter` (Float): oscillator parameter of excited state quantum-mechanical oscillator in 1/Angstrom**2 
+>
+>`vib_zero_point_energy` (Float): vibrational zero point energy in eV
+>
+>`e_offset` (Float): energetic offset with respect to ground state minimum in eV
+>
+>`q_xs` (Float): spatial displacement of excited state with respect to the ground state minimum in Angstrom
+>
+>`boltzmann_dist` (Dict): Boltzman distribution generated with [`auxiliary.boltzmann_distribution`](#boltzmanndistribution)
+>
+>`temp` (Float): Temperature in Kelvin - must be key in dictionary boltzmann_dist
+
+***Returns:***
+>ndarray: size(E). emission intensity with respect to values of E. **nan-values resulting from E-values greater than singularity are set to 0 to ensure down the line usability.**
 
 ### 3.3 quantummechanical
 
 #### harmonic_oscillator_wavefunction
+```python
+harmonic_oscillator_wavefunction(level, spatial_coordinate, oscillator_parameter)
+```
+Auxiliary function to caluclate the wave function of harmonic oscillator functions of a given vibrational level.
+
+***Arguments:***
+> `level` (Int): oscillator quantum number
+>
+>`spatial_coordinate` (ndarray): array of spatial coordinates (in Angstrom) for which wavefunction is calculated
+>
+>`oscillator_parameter` (_type_): oscillator parameter alpha in 1/Angstrom**2
+
+#### 
+
+***Returns:***
+>ndarray: values of the wavefuncion at given spatial coordinates
+
 
 #### franck_condon_factors
+```python
+franck_condon_factor(level, xs_parameter, gs_parameter, q_xs, e_offset, mass, q_low= -.5, q_high= .5, dq= 10000, n_gs= 25)
+```
+
+numerically calculates  emissionenergies and respective Franck-Condon factors for the emission from an vibrational level (given by 'level') of an excited state oscillator to the vibrational levels of a ground state harmonical oscillator
+
+***Arguments:***
+>`level` (Int): oscillator quantum number
+>
+>`xs_parameter` (Float): excited state oscillator parameter alpha in 1/Angstrom**2
+>
+>`gs_parameter` (Float): ground state oscillator parameter alpha in 1/Angstrom**2
+>
+>`q_xs` (Float): spatial displacement of excited state with respect to the ground state minimum in Angstrom
+>
+>`e_offset` (Float): energetic offset with respect to ground state minimum in eV
+>`mass` (Float): mass of the dimer system in kg
+> 
+>*Simulation parameters - optional*
+>
+>`q_low` (int, optional): lower intergration boundary of spatial coordinate. Defaults to -1.
+>
+>`q_high` (int, optional): upper intergration boundary of spatial coordinate. Defaults to 1.
+>
+>`dq`(int, optional): value number between lower and upper integration boundary of spatial coordinate, determines spatial resolution during integration. Defaults to 10000.
+>
+>`n_gs` (int, optional): simulated levels of the ground state oscillator. Defaults to 90.
+
+***Returns:***
+>ndarray: size(3, n_GS)
+>
+>`[0,:]`: int:  quantum number of respective final vibratioanl state k of ground state level for the transition n --> k
+>
+>`[1,:]`: Floats:         photon energy of transition n --> k
+>
+>`[2,:]`: Floats:         value of Frank-Condon factor of transition n --> k
 
 ### 3.4 auxiliary
 
+#### boltzmann_distribution
+```python
+boltzmann_distribution(Temp_list, vib_zero_point_energy, no_of_states= 50):
+```
+Generates a Boltzmann probability distribution for a quantum-mechanical harmonic oscillator with zero point energy "vib_zero_point_energy"
+
+***Arguments:***
+> `Temp_list` (list of Floates): list of temperature values in Kelvin 
+>
+>`vib_zero_point_energy` (_type_): vibrational zero point energy in eV
+>
+>`No_of_states` (int, optional): number of simulated excited states for canocial partion sum. Defaults to 50.
+
+***Returns:***
+> dictionary: 
+>
+>key (Float): entries of Temp_list; 
+>
+>values (ndarray): (2 x no_of_states); [0]: vibrational level, [1]: corresponding occupation probability
+
+#### gauss_lineshape
+```python
+gauss_lineshape(x, A, w, xc):
+```
+gauss function as line shape function
+$$
+L(x) = \frac{A}{\sqrt{2\pi\sigma}}\exp\left( - \frac{(x-x_c)^2}{2\sigma^2} \right)
+$$
+***Arguments:***
+>`x` (ndarray): x-values
+>
+>`A` (Float): area under the curve
+>
+>`w` (Float): standard deviation
+>
+>`xc` (Float): x center
+
+***Returns:***
+>nadarry: function values at x-values
 
 ## 4. License and citation
 
 ### License
 
+Package distributed under MIT license. Copyright (c) 2022 Sebastian Hammer.
+
 ### Citation
+
+If you use this package or its contents for apublication please consider citing the zendoo archive or the corresponding publication.

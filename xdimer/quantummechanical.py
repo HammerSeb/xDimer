@@ -7,7 +7,7 @@ from scipy.special import hermite
 
 
 def harmonic_oscillator_wavefunction(level, spatial_coordinate, oscillator_parameter):
-    """_summary_
+    """Auxiliary function to caluclate the wave function of harmonic oscillator functions of a given vibrational level.
 
     Args:
         level (Int): oscillator quantum number
@@ -28,9 +28,9 @@ def franck_condon_factor(level, xs_parameter, gs_parameter, q_xs, e_offset, mass
         level (Int): oscillator quantum number
         xs_parameter (Float): excited state oscillator parameter alpha in 1/Angstrom**2
         gs_parameter (Float): ground state oscillator parameter alpha in 1/Angstrom**2
-        q_xs (_type_): spatial displacement of excited state with respect to the ground state minimum in Angstrom
-        e_offset (_type_): energetic offset with respect to ground state minimum in eV
-        mass (_type_): mass of the dimer system in kg
+        q_xs (Float): spatial displacement of excited state with respect to the ground state minimum in Angstrom
+        e_offset (Float): energetic offset with respect to ground state minimum in eV
+        mass (Float): mass of the dimer system in kg
         ### Simulation parameters - optional
         q_low (int, optional): lower intergration boundary of spatial coordinate. Defaults to -1.
         q_high (int, optional): upper intergration boundary of spatial coordinate. Defaults to 1.
@@ -39,7 +39,7 @@ def franck_condon_factor(level, xs_parameter, gs_parameter, q_xs, e_offset, mass
 
     Returns:
         ndarray: size(3, n_GS)
-                 [0,:]: tuples (n, k):  quantum numbers of respective Franck-Condon factor of transition n --> k, with n = level and k as the respective ground state level
+                 [0,:]: int:  quantum number of respective final vibratioanl state k of ground state level for the transition n --> k
                  [1,:]: Floats:         photon energy of transition n --> k
                  [2,:]: Floats:         value of Frank-Condon factor of transition n --> k
     """
