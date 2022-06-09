@@ -202,20 +202,206 @@ dimer_system(mass, gs, xs, q_xs, e_offset, energtic_broadening, setup_mode)
 ```
 `mass`, `q_xs` and `e_offset` are the reduced mass (in atomoic units), the spatial displacement (in Angstrom) and the energetic offset (in eV), respectively. 
 
-`energetic_broadening`  defines the line width parameter used for the     
+`gs` and `xs` define the ground and excited state potential, respectively. See `setup_mode` for details.
 
+`energetic_broadening` defines the line width parameter as standard deviation of the gaussian linshape of each vibronic transition calculated by `quantummechanical_emission` in eV. Default is `0.02`. 
+
+`setup_mode` defines the input mode for the defintion of the ground and exited state potential by the variables`gs` and `xs`, respectively. Accepted inputs `'vib_energy'` (default), `'osc_const'` and `'osc_para'`. 
+>`'vib_energy'` (default): potentials are defined by their vibrational energy quantum $E_vib$ in eV. 
+>
+>`'osc_const'`: potentials are defined by their oscillator constant $R$ in eV/Angstrom^2.
+>
+>`'osc_para'`: potentials are defined by their oscillator parameter in 1/Angstrom^2.
+
+If none of the above modes is used [`xDimerModelError`](#errors-and-exceptions) is raised.
+
+Dimer properties can be accessed by calling the respective internal variable:
+>reduced mass: `dimer_system.mass`
+>
+>spatial offset: `dimer_system.q_xs`
+>
+>energetic offset: `dimer_system.e_offset`
+>
+>energetic broadening: `dimer_system.energetic_broadening` 
+
+Parameters of the harmonic potentials can be returned by properties:
+>Vibrational energy quantum
+>
+>`dimer_system.gs_vib_energy`: ground state
+>
+>`dimer_system.xs_vib_energy`: excited state
+>
+>Oscillator constant
+>
+>`dimer_system.gs_potential`: ground state
+>
+>`dimer_system.xs_potential`: excited state
+>
+>Oscillator parameter
+>
+>`dimer_system.gs_parameter`: ground state
+>
+>`dimer_system.xs_parameter`: excited state
 
 #### semiclassical_emission
+Calculates and returns a semiclassical emission spectrum for a dimer system at a given temperature or list a of temperatures. The first ***six*** vibrational levels of the excited state are taken into account.
+```python
+semiclassical_emission(E, temp, dimer)
+```
+***Arguments:***
+> `E` (1-D ndarray): photon emission energy in eV
+>
+>`temp` (list/Float): either list of floats or float: List of temperature values or single temperature value in Kelvin
+>
+>`dimer` (instance dimer_system/list): either instance of dimer_system class or list of variables
+>
+>       instance dimer_system: use for simulation of emission spectra from exisiting dimer system
+>
+>       list: use for fitting a data set, list needs to be of the form list [0: gs_potential, 1: xs_parameter, 2: e_offset, 3: q_xs, 4: mass]
+COMMENT: mass should not be used as a free fit parameter but be set to the reduced mass of the dimer system
+
+***Returns:***
+> dict/ndarray:   if temp is list, dictionary (key = temp): ndarrays containing emission spectra for respective temperature temp
+>
+> if temp is float: ndarrays containing emission spectra for respective temperature temp
+>
+>array structure: [8, size(E)]:  
+>
+>`array[0]   = E` (emission energies)
+>
+>`array[i+1]`: X-dimer emission spectrum from the i-th excited vibrational state (i in [0,...,5])
+>
+>`array[7]` : Semi-classical X-dimer emission spectrum at temperature "temp" considering the first six vibrational levels of the excited state oscillator
+
+***Example***
+```python
+import numpy as np
+import xdimer
+
+# initilazises dimer system
+dimer = xdimer.dimer_system(400, 0.22, 0.25, 1.5)
+
+#Define energy axis for simulation and temperatures
+E = np.linspace(1, 3, 500)
+temp = [5, 50, 100, 150, 200, 250, 300]
+
+#calculate emission spectra for given temperatures
+spectra = xdimer.semiclassical_emission(E, temp, dimer)
+
+spectrum_150K = spectra[150]
+```
 
 #### quantummechanical_emission
 
+Calculates and returns a quantummecanical emission spectrum for a dimer system at a given temperature or list a of temperatures. Function returns stick spectra and continous spectrum as superposition of gaussian emissions with intensity and position defined by the stick spectrum
+```python
+quantummechanical_emission(E, temp, dimer, simulation_parameters = [5, -.5, .5, 10000, 25])
+```
+***Arguments:***
+>`E` (ndarray): photon emission energy in eV
+>
+>`temp` (list/Float): either list of floats or float: List of temperature values or single temperature value in Kelvin
+>
+>`dimer` (instance dimer_system/list): either instance of dimer_system class or list of variables
+>
+>       instance dimer_system: use for simulation of emission spectra from exisiting dimer system
+>       list: use for fitting a data set, list needs to be of the form list [0: gs_parameter, 1: xs_parameter, 2: e_offset, 3: q_xs, 4: energetic_broadening, 5: mass]
+>
+>`simulation_parameters` (list, optional): specifies the simulation parameters `[n_sim, q_low, q_high, dq, n_gs]`. First entry `n_sim` sets **number of simulated vibrational levels of excited state**. Other four parameters specify numeric evaluation of Franck-Condon factors, see [`quantummechanical.franck_condon_factor`](#franckcondonfactors).  Defaults to [5 ,-.5, .5, 10000, 25].
+
+COMMENT: mass should not be used as a free fit parameter but be set to the reduced mass of the dimer system
+
+***Returns***
+> dict/list:      if temp is list, dictionary (key = temp): each entry contains list of the form `[spectra_full, spectra_stick]`
+>
+>if temp is float: list of the form `[spectra_full, spectra_stick]` for respective temperature temp
+>
+> `spectra_full` (ndarray):     
+>
+>`[0] = E` (emission energies)
+>
+>`[1: n_sim]`: smooth emission spectrum for 0-th to (n_sim-1)-th vibrational level of excited state
+>
+>`[n_sim+1]`: full emission spectrum as sum over all excited state transitions from 0-th to (n_sim-1)-th
+>
+>`spectra_stick` (list of ndarrays):  list of length n_sim. 
+>
+>Each entry contains the output of quantummechanical.franck_condon_factor as ndarray `[0: final state, 1: transition energies, 2: boltzmann weighted transition intensities]` for the respective excited state level, i.e. `spectra_stick[0]` holds 0-th vibrational level, `spectra_stick[1]` holds 1-st vibrational level and so forth.
+
+***Example***
+```python
+import numpy as np
+import xdimer
+
+# initilazises dimer system
+dimer = xdimer.dimer_system(400, 0.22, 0.25, 1.5)
+
+#Define energy axis for simulation and temperatures
+E = np.linspace(1, 3, 500)
+temp = [5, 50, 100, 150, 200, 250, 300]
+
+#calculate emission spectra for given temperatures
+spectra = xdimer.quantummechanical_emission(E, temp, dimer)
+
+qm_150K = spectra[150]
+spectra150K, stick_spectra150K = qm_150k[0], qm_150k[1]
+
+```
+
 #### Errors and Exceptions
+```python
+xDimerModeError(Exception):
+```
+Subclass of Exception. Raised if instance of dimer_system class is created using an unknown setup mode.
 
 ### 3.2 semiclassical
 
+#### excited_state_energy
+```python
+excited_state_energy(n,vib_zero_point_energy,e_offset)
+```
+Auxillary function for semi-classical emission spectra. Calculates excited state energy of vibrational level n with respect to ground state minimum in eV. Equation (5) in publication
+
+***Arguments:***
+>`n `(int): vibrational level n
+>
+>`vib_zero_point_energy` (Float): vibrational zero point energy in eV 
+>
+>`e_offset` (Float): energetic offset with respect to ground state minimum in eV
+
+***Returns:***
+> Float: excited state energy of vibrational level n in eV
+
+#### displacement_from_energy
+```python
+displacement_from_energy(E, n, gs_potential, vib_zero_point_energy, e_offset, q_xs):
+```
+Auxillary function for semi-classical emission spectra. Inverse function of the emission energy - spatial coordinate relation. Calculates spatial displacement as function of photon energy for emission from the excited state at vibrational level `n` in Angstrom. Equation (S4) in electronic supplementary information.
+***Arguments:***
+> `E` (ndarray): photon emission energy in eV
+>
+>`n` (Int): vibrational level n
+>
+>`gs_potential` (Float): oscillator constant R_0 of the ground state potential in eV/Angstrom**2
+>
+>`vib_zero_point_energy` (Float): vibrational zero point energy in eV
+>
+>`e_offset` (Float): energetic offset with respect to ground state minimum in eV
+>`q_xs` (Float): spatial displacement of excited state with respect to the ground state minimum in Angstrom
+
+***Returns:***
+>ndarray: spatial displacement in Angstrom
+
+#### xdimer_sc_emission
+
+
 ### 3.3 quantummechanical
 
-### 3.4 emission
+#### harmonic_oscillator_wavefunction
+
+#### franck_condon_factors
+
+### 3.4 auxiliary
 
 
 ## 4. License and citation

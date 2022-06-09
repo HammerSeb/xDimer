@@ -9,13 +9,22 @@ from . import quantummechanical
 from . import auxiliary
 
 class dimer_system():
-    """
-    this class defines a dimer system with its attributes such as 
-    * reduced mass
-    * ground state ponetial parameters
-    * excited state potential parameters
-    * energetic displacement
-    * 
+    """Class defining a dimer system containing all defining physical quantities.
+
+    Args: 
+        mass (FLoat): reduced mass (in atomoic units)
+        q_xs (FLoat): the spatial displacement (in Angstrom)
+        e_offset (FLoat): energetic offset (in eV)
+        gs (Float): defines the ground state postential. See `setup_mode` for details.
+        xs (Float): defines the excited state postential. See `setup_mode` for details.
+        energetic_broadening (Float, optional): line width parameter as standard deviation of the gaussian linshape of each vibronic transition calculated by `quantummechanical_emission` in eV. Default is `0.02`. 
+        setup_mode (string, optional):input mode for ground and exited state potential by t`gs` and `xs`.
+        Accepted inputs `'vib_energy'` (default), `'osc_const'` and `'osc_para'`. 
+            vib_energy (default): potentials are defined by their vibrational energy quantum $E_vib$ in eV. 
+            osc_const: potentials are defined by their oscillator constant $R$ in eV/Angstrom^2.
+            osc_para: potentials are defined by their oscillator parameter in 1/Angstrom^2.
+        If none of the above modes is used xDimerModelError is raised.
+
     """
     def __init__(self, mass , gs , xs , q_xs, e_offset, energetic_broadening = 0.02 ,setup_mode = 'vib_energy'):
         self.mass = mass
@@ -86,21 +95,35 @@ class dimer_system():
         return (self.mass_si/self.hJ**2)*(self.gs_vib_energy*self.eCharge)*1e-20
     
 def semiclassical_emission(E, temp, dimer):
-    """
+    """Calculates and returns a semiclassical emission spectrum for a dimer system at a given temperature or list a of temperatures. The first six vibrational levels of the excited state are taken into account. 
     Args:
         E (1-D ndarray): photon emission energy in eV
         temp (list/Float): either list of floats or float: List of temperature values or single temperature value in Kelvin
         dimer (instance dimer_system/list): either instance of dimer_system class or list of variables
                                             instance dimer_system: use for simulation of emission spectra from exisiting dimer system
                                             list: use for fitting a data set, list needs to be of the form list [0: gs_potential, 1: xs_parameter, 2: e_offset, 3: q_xs, 4: mass]
-                                            mass should not be used as a free fit parameter but be set to the reduced mass of the dimer system
+                                            COMMENT: mass should not be used as a free fit parameter but be set to the reduced mass of the dimer system
 
     Returns:
         dict/ndarray:   if temp is list, dictionary (key = temp): ndarrays containing emission spectra for respective temperature temp
                         if temp is float: ndarrays containing emission spectra for respective temperature temp
-                        array structure: [8, size(E)]:  array[0]   = E # emission energy
-                                                        array[i+1] = X-dimer emission spectrum from the i-th excited vibrational state (i in [0,...,5])
-                                                        array[7]   = Semi-classical X-dimer emission spectrum at temperature "temp" considering the first six vibrational levels of the excited state oscillator
+                        array structure: [8, size(E)]:  array[0]   = E (emission energies)
+                                                        array[i+1] : X-dimer emission spectrum from the i-th excited vibrational state (i in [0,...,5])
+                                                        array[7]   : Semi-classical X-dimer emission spectrum at temperature "temp" considering the first six vibrational levels of the excited state oscillator
+    
+    Example:
+        import numpy as np
+        import xdimer
+
+        # initilazises dimer system
+        dimer = xdimer.dimer_system(400, 0.22, 0.25, 1.5)
+
+        #Define energy axis for simulation and temperatures
+        E = np.linspace(1, 3, 500)
+        temp = [5, 50, 100, 150, 200, 250, 300]
+
+        spectra = xdimer.semiclassical_emission(E, temp, dimer)
+    
     """
     if isinstance(dimer, dimer_system):
         gs_potential = dimer.gs_potential
@@ -153,7 +176,7 @@ def semiclassical_emission(E, temp, dimer):
         return out[temp[0]]
 
 def quantummechanical_emission(E, temp, dimer, simulation_parameters = [5, -.5, .5, 10000, 25]):
-    """_summary_
+    """Calculates and returns a quantummecanical emission spectrum for a dimer system at a given temperature or list a of temperatures. Function returns stick spectra and continous spectrum as superposition of gaussian emissions with intensity and position defined by the stick spectrum
 
     Args:
         E (ndarray): photon emission energy in eV
@@ -162,17 +185,35 @@ def quantummechanical_emission(E, temp, dimer, simulation_parameters = [5, -.5, 
                                             instance dimer_system: use for simulation of emission spectra from exisiting dimer system
                                             list: use for fitting a data set, list needs to be of the form list [0: gs_parameter, 1: xs_parameter, 2: e_offset, 3: q_xs, 4: energetic_broadening, 5: mass]
                                                   mass should not be used as a free fit parameter but be set to the reduced mass of the dimer system
-        simulation_parameters (list, optional): specifies the simulation parameters [n_sim, q_low, q_high, dq, n_gs]. First entry n_sim sets number of simulated vibrational levels of excited state. Other for parameters specify numeric evaluation of Franck-Condon factors, see quantummechanical.franck_condon_factor.  Defaults to [5 ,-.5, .5, 10000, 25].
+        simulation_parameters (list, optional): specifies the simulation parameters [n_sim, q_low, q_high, dq, n_gs]. First entry n_sim sets number of simulated vibrational levels of excited state. Other four parameters specify numeric evaluation of Franck-Condon factors, see quantummechanical.franck_condon_factor.  Defaults to [5 ,-.5, .5, 10000, 25].
 
     Returns:
         dict/list:      if temp is list, dictionary (key = temp): each entry contains list of the form [spectra_full, spectra_stick]
                         if temp is float: list of the form [spectra_full, spectra_stick] for respective temperature temp
-                        spectra_full (ndarray):     [0]: E, as specifed in input
+                        spectra_full (ndarray):     [0]: E (emission energies)
                                                     [1: n_sim]: smooth emission spectrum for 0-th to (n_sim-1)-th vibrational level of excited state
                                                     [n_sim+1]: full emission spectrum as sum over all excited state transitions from 0-th to (n_sim-1)-th
-                        spectra_stick (list of ndarrays):  list of length n_sim. each entry contains the output of quantummechanical.franck_condon_factor as ndarray [0: transition tuples, 1: transition energies, 2: boltzmann weighted transition intensities] for the respective excited state level, i.e. spectra_stick[0] holds 0-th vibrational level, spectra_stick[1] holds 1-st vibrational level and so forth.
+                        spectra_stick (list of ndarrays):  list of length n_sim. each entry contains the output of quantummechanical.franck_condon_factor as ndarray [0: final state, 1: transition energies, 2: boltzmann weighted transition intensities] for the respective excited state level, i.e. spectra_stick[0] holds 0-th vibrational level, spectra_stick[1] holds 1-st vibrational level and so forth.
+    
+    Example:
+        import numpy as np
+        import xdimer
+
+        # initilazises dimer system
+        dimer = xdimer.dimer_system(400, 0.22, 0.25, 1.5)
+
+        #Define energy axis for simulation and temperatures
+        E = np.linspace(1, 3, 500)
+        temp = [5, 50, 100, 150, 200, 250, 300]
+
+        #calculate emission spectra for given temperatures
+        spectra = xdimer.quantummechanical_emission(E, temp, dimer)
+
+        qm_150K = spectra[150]
+        spectra150K, stick_spectra150K = qm_150k[0], qm_150k[1]
+    
     """
-    # simulation_parameters = [n_sim ,q_low= -1, q_high= 1, dq= 10000, n_gs= 90]
+
     
     if isinstance(dimer, dimer_system):
         gs_parameter = dimer.gs_parameter
