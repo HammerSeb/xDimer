@@ -1,10 +1,13 @@
 # ignore onedrive .stats files
 *.stats
 
-#ingone vscode debugging json
+# ingore vscode debugging json
 **/.vscode
 
-#ingone testing venv
+# ingore testing venv
 **/testing
 **/XDimer.egg-info
 **/__pycache__
+
+# ignore distribtion folder
+**/dist

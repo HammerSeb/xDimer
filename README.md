@@ -1,23 +1,26 @@
 # xDimers
-***This package is currently beta tested and cleaned up for publication (v0.9.0***
 
 Pyhton package for simulating multi-molecular emission spectra dominated by a single effective intermolecular vibrational mode. This package accompanies the publication in ...
 
 ## Table of contents
 1. [Installation](#1-installation)
 2. [Basic introduction](#2-basic-introduction)
-    * [Model and definitions](#21-model-and-defintions)
-    * [Basic functionality](#22-basic-functionality)
-    * [Fitting emission data](#23-fitting-emission-data)
-    * [Examples](#24-examples)
+* [Model and definitions](#21-model-and-defintions)
+* [Basic functionality](#22-basic-functionality)
+* [Fitting emission data](#23-fitting-emission-data)
+* [Examples](#24-examples)
 3. [API reference guide](#3-api-reference-guide)
-    * [xdimer](#31-xdimer)
-    * [semiclassical](#32-semiclassical)
-    * [quantummechanical](#33-quantummechanical)
-    * [auxiliary](#34-auxiliary)
+* [xdimer](#31-xdimer)
+* [semiclassical](#32-semiclassical)
+* [quantummechanical](#33-quantummechanical)
+* [auxiliary](#34-auxiliary)
 4. [License and citation](#4-license-and-citation)
 
 ## 1. Installation
+Install package from TestPyPi with
+```
+python -m pip install -i https://test.pypi.org/simple/ XDimer
+```
 
 The latest development version is available on GitHub. To install use:
 ```
@@ -147,7 +150,7 @@ either as entrys in a dictonary keyed by multiple temperature values given in `t
 >
 >`spectrum_stick[i][2]` Franck-Condon factor $|\braket{k|i}|^2$ transition weighted with a respective Boltzmann factor
 
-**`spectra_full`** is a `ndarray` contains the convolution of the stick spectra with a gaussian line shape function of energetic broadening w (specified as an optional parameter when creating a [`dimer_system'](#dimersystem) instance) resulting in smooth emission spectra. 
+**`spectra_full`** is a `ndarray` and contains the convolution of the stick spectra with a gaussian line shape function of energetic broadening w (specified as an optional parameter when creating a [`dimer_system`](#dimersystem) instance) resulting in smooth emission spectra. 
 
 >**The smooth emission spectra** are returned as
 >
@@ -191,7 +194,7 @@ python -m xdimer.examples.fitting_emission_data
 
 **simulating_emission** simulates a semiclassical and quantum-mechanical emission spectrum for a temperature specified by console input when running the module. The individual vibrational contributions from the excited state are unraveled and depicted colorcoded with the main emission spectrum. The dimer system used in the simulation is created by
 ```python
- dimer = xdimer.dimer_system(577.916/2, .022, .026, 0.1, 1.55, energetic_broadening=.02)
+dimer = xdimer.dimer_system(577.916/2, .022, .026, 0.1, 1.55, energetic_broadening=.02)
 ```
 
 **fitting_emission_spectra** simulates a data set of emission data using `xdimer.quantummechanical_emission` for four different temperatures. It then performs a fit to the whole data set, including all temperatures. The fit does take a while (approx 90 seconds). The dimer system used to generate the data set is created by
@@ -221,12 +224,15 @@ dimer_system(mass, gs, xs, q_xs, e_offset, energtic_broadening, setup_mode)
 
 `energetic_broadening` defines the line width parameter as standard deviation of the gaussian linshape of each vibronic transition calculated by `quantummechanical_emission` in eV. Default is `0.02`. 
 
-`setup_mode` defines the input mode for the defintion of the ground and exited state potential by the variables`gs` and `xs`, respectively. Accepted inputs `'vib_energy'` (default), `'osc_const'` and `'osc_para'`. 
->`'vib_energy'` (default): potentials are defined by their vibrational energy quantum $E_vib$ in eV. 
+
+
+`setup_mode` defines the input mode for the defintion of the ground and exited state potential by the variables `gs` and `xs`, respectively. Accepted inputs `'vib_energy'` (default), `'osc_const'` and `'osc_para'`. 
+
+> `'vib_energy'` (default): potentials are defined by their vibrational energy quantum $E_vib$ in eV. 
 >
->`'osc_const'`: potentials are defined by their oscillator constant $R$ in eV/Angstrom^2.
+> `'osc_const'`: potentials are defined by their oscillator constant $R$ in eV/Angstrom^2.
 >
->`'osc_para'`: potentials are defined by their oscillator parameter in 1/Angstrom^2.
+> `'osc_para'`: potentials are defined by their oscillator parameter in 1/Angstrom^2.
 
 If none of the above modes is used [`xDimerModelError`](#errors-and-exceptions) is raised.
 
@@ -292,17 +298,13 @@ COMMENT: mass should not be used as a free fit parameter but be set to the reduc
 ```python
 import numpy as np
 import xdimer
-
 # initilazises dimer system
 dimer = xdimer.dimer_system(400, 0.22, 0.25, 1.5)
-
-#Define energy axis for simulation and temperatures
+# Define energy axis for simulation and temperatures
 E = np.linspace(1, 3, 500)
 temp = [5, 50, 100, 150, 200, 250, 300]
-
-#calculate emission spectra for given temperatures
+# calculate emission spectra for given temperatures
 spectra = xdimer.semiclassical_emission(E, temp, dimer)
-
 spectrum_150K = spectra[150]
 ```
 
@@ -347,20 +349,15 @@ COMMENT: mass should not be used as a free fit parameter but be set to the reduc
 ```python
 import numpy as np
 import xdimer
-
 # initilazises dimer system
 dimer = xdimer.dimer_system(400, 0.22, 0.25, 1.5)
-
-#Define energy axis for simulation and temperatures
+# Define energy axis for simulation and temperatures
 E = np.linspace(1, 3, 500)
 temp = [5, 50, 100, 150, 200, 250, 300]
-
-#calculate emission spectra for given temperatures
+# calculate emission spectra for given temperatures
 spectra = xdimer.quantummechanical_emission(E, temp, dimer)
-
 qm_150K = spectra[150]
 spectra150K, stick_spectra150K = qm_150k[0], qm_150k[1]
-
 ```
 
 #### Errors and Exceptions
