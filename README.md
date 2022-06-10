@@ -1,12 +1,20 @@
 # xDimers
-***This package is currently beta tested and cleaned up for publication***
+***This package is currently beta tested and cleaned up for publication (v0.9.0***
 
 Pyhton package for simulating multi-molecular emission spectra dominated by a single effective intermolecular vibrational mode. This package accompanies the publication in ...
 
 ## Table of contents
 1. [Installation](#1-installation)
 2. [Basic introduction](#2-basic-introduction)
+    * [Model and definitions](#21-model-and-defintions)
+    * [Basic functionality](#22-basic-functionality)
+    * [Fitting emission data](#23-fitting-emission-data)
+    * [Examples](#24-examples)
 3. [API reference guide](#3-api-reference-guide)
+    * [xdimer](#31-xdimer)
+    * [semiclassical](#32-semiclassical)
+    * [quantummechanical](#33-quantummechanical)
+    * [auxiliary](#34-auxiliary)
 4. [License and citation](#4-license-and-citation)
 
 ## 1. Installation
@@ -18,7 +26,7 @@ python -m pip install git+https://github.com/HammerSeb/xDimer.git
 
 ***PyPi and Conda version missing***
 
-## 2.Introduction
+## 2.Basic Introduction
 
 This package enables the quick simulation of emission spectra from Franck-Condon vibronic transitions between the vibrational levels of two harmonic oscillators with different potential strength at different temperatures. For this purpose, it provides two ways to simulate the emission, a semi-classical one for which the final state harmonic oscillator is treated as a continous function and a full quantum-mechanical approach, for which the individual Franck-Condon factors are calculated numerically. A short introduction of the underlying physical model as well as some basic defintions are given [below](#21-basic-defintions) please refere to the [related publication](#citation) for an in detail description of the physical model and the mathematical definition.
 
@@ -181,9 +189,15 @@ and
 python -m xdimer.examples.fitting_emission_data
 ```
 
-**simulating_emission** simulates a semiclassical and quantum-mechanical emission spectrum for a temperature specified by console input when running the module. The individual vibrational contributions from the excited state are unraveled and depicted colorcoded with the main emission spectrum. 
+**simulating_emission** simulates a semiclassical and quantum-mechanical emission spectrum for a temperature specified by console input when running the module. The individual vibrational contributions from the excited state are unraveled and depicted colorcoded with the main emission spectrum. The dimer system used in the simulation is created by
+```python
+ dimer = xdimer.dimer_system(577.916/2, .022, .026, 0.1, 1.55, energetic_broadening=.02)
+```
 
-**fitting_emission_spectra** simulates a data set of emission data using `xdimer.quantummechanical_emission` for four different temperatures. It then performs a fit to the whole data set, including all temperatures. The fit does take a while (approx 90 seconds).    
+**fitting_emission_spectra** simulates a data set of emission data using `xdimer.quantummechanical_emission` for four different temperatures. It then performs a fit to the whole data set, including all temperatures. The fit does take a while (approx 90 seconds). The dimer system used to generate the data set is created by
+```python
+dimer = xdimer.dimer_system(400, .027, .023, 0.08 ,1.55, energetic_broadening= .019)
+```
 
 
 ## 3. API reference guide
@@ -504,10 +518,65 @@ numerically calculates  emissionenergies and respective Franck-Condon factors fo
 >`[2,:]`: Floats:         value of Frank-Condon factor of transition n --> k
 
 ### 3.4 auxiliary
+#### osc_para_to_vib_energy
+```python
+osc_para_to_vib_energy(osc_para, mass)
+```
+Transforms oscillator parameter to vibrational energy quantum.
+
+***Arguments:***
+>`osc_para` (float): oscillator parameter in 1/Angstrom^2
+>
+>`mass` (float): reduced mass in atomic units
+
+***Returns:***
+>float: vibrational energy quantum in eV
+
+#### vib_energy_to_osc_para
+```python
+vib_energy_to_osc_para(vib_energy, mass)
+```
+Transforms vibrational energy quantum to oscillator parameter
+
+***Arguments:***
+>`vib_energy` (float): vibrational energy quantum in eV
+>
+>`mass` (float): reduced mass in atomic units
+
+***Returns:***
+>float: oscillator parameter in 1/Angstrom^2
+
+#### osc_const_to_vib_energy
+```python
+osc_const_to_vib_energy(osc_const, mass)
+```
+Transforms oscillator constant to vibrational energy quantum.
+
+***Arguments:***
+>`osc_const` (float): 
+>
+>`mass` (float): reduced mass in atomic units
+
+***Returns:***
+>float: vibrational energy quantum in eV
+
+#### vib_energy_to_osc_const
+```python
+vib_energy_to_osc_const(vib_energy, mass)
+```
+Transforms vibrational energy quantum to oscillator constant
+
+***Arguments:***
+>`vib_energy` (float): vibrational energy quantum in eV
+>
+>`mass` (float): reduced mass in atomic units
+
+***Returns:***
+>float: oscillator constant in eV/Angstrom^2
 
 #### boltzmann_distribution
 ```python
-boltzmann_distribution(Temp_list, vib_zero_point_energy, no_of_states= 50):
+boltzmann_distribution(Temp_list, vib_zero_point_energy, no_of_states= 50)
 ```
 Generates a Boltzmann probability distribution for a quantum-mechanical harmonic oscillator with zero point energy "vib_zero_point_energy"
 

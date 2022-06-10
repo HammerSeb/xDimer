@@ -3,9 +3,6 @@ import math as m
 import scipy.integrate as integ
 from scipy.special import hermite
 
-
-
-
 def harmonic_oscillator_wavefunction(level, spatial_coordinate, oscillator_parameter):
     """Auxiliary function to caluclate the wave function of harmonic oscillator functions of a given vibrational level.
 

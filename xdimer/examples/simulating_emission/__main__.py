@@ -1,17 +1,16 @@
-import sys
-import xdimer
-from xdimer import semiclassical as sc
-import numpy as np
 import math as m
+import numpy as np
 from matplotlib import pyplot as plt
 
-if __name__ == '__main__':
-    print('xDimer example - enter temperature in Kelvin:')
-    temperature = float(input()) #temperature user input
+import xdimer
+from xdimer import semiclassical as sc
 
+
+def main(temperature):
+    
     # Set up dimer system with reduced mass 0.5*577.916u (ZnPc dimer), ground state vibrational energy 22 meV, excited state displaced by 0.1 Angstrom, with vibrational energy 26 meV and an energetic offset of 1.5 eV
     dimer = xdimer.dimer_system(577.916/2, .022, .026, 0.1, 1.55, energetic_broadening=.02)
-    
+
     # generate energy axis
     energy_axis = np.linspace(1,1.8, num=500)
 
@@ -20,14 +19,14 @@ if __name__ == '__main__':
 
     # calculate singularity in emission spectrum which has lowest energy
     singularity = sc.excited_state_energy(0, 0.5*dimer.xs_vib_energy, dimer.e_offset)
-    
+
     # generate semi-classical emission spectrum
     emission_spectrum = xdimer.semiclassical_emission(energy_axis, temperature, dimer)
     print('semi-classical emission spectrum generated')
 
     ### Quantum-mechanical emission spectra
     print('generating quantum-mechanical emission spectrum. This might take a while...')
-    
+
     # generate quantum-mechanical spectra
     [qm_spectra_full, qm_spectra_stick] = xdimer.quantummechanical_emission(energy_axis, temperature, dimer)
     print('quantum-mechanical emission spectrum generated')
@@ -39,7 +38,7 @@ if __name__ == '__main__':
     ax = figure.subplots(1,2)
     colors_plot = ['blueviolet', 'skyblue', 'darkorange', 'forestgreen', 'red', 'aqua', 'fuchsia']
     max_plot = emission_spectrum[7].max() + 0.15*emission_spectrum[7].max()
-    
+
     # semi-classical plot
     ax[0].set_xlim((1,1.8))
     ax[0].set_ylim((0,max_plot))
@@ -62,7 +61,7 @@ if __name__ == '__main__':
         ax[0].plot(emission_spectrum[0], emission_spectrum[6], color = colors_plot[6], label = '5. vib.', linestyle = '--', linewidth = 2, zorder = 7)
     ax[0].plot(emission_spectrum[0], emission_spectrum[7], color = colors_plot[0], label = 'full', linestyle = '-', linewidth = 3, zorder = 1)
     ax[0].legend(title = f'T = {temperature} K', loc = 'upper left')
-    
+
     # quantum-mechanical plot
     ax[1].set_xlim((1,1.8))
     ax[1].set_ylim((0,max_plot))
@@ -87,3 +86,9 @@ if __name__ == '__main__':
     ax[1].plot(qm_spectra_full[0], qm_spectra_full[6],  color = colors_plot[0], label = 'full', linestyle = '-', linewidth = 3, zorder = 1)
 
     plt.show()
+
+if __name__ == '__main__':
+    print('xDimer example - enter temperature in Kelvin:')
+    temp = float(input()) #temperature user input
+    main(temp)
+   

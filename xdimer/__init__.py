@@ -34,17 +34,10 @@ class dimer_system():
         self.setup_mode = setup_mode
         self.energetic_broadening = energetic_broadening
         if self.setup_mode == 'vib_energy' or self.setup_mode == 'osc_const' or self.setup_mode == 'osc_para':
-            print(f'Dimer system set up in {self.setup_mode} mode')
             self.gs_definition = gs
             self.xs_definition = xs
         else:
             raise xDimerModeError('Unknown setup mode: use \' vib_energy\', \' osc_const\' or \'osc_para \' ')
-        
-        '''global values for conversion calculations'''
-        self.hJ = 1.0456e-34 # hbar in J/s
-        self.eCharge = 1.6022e-19 # elementary charge 
-
-
 
     @property
     def xs_vib_energy(self):
@@ -52,8 +45,8 @@ class dimer_system():
         if self.setup_mode == 'vib_energy':
             return self.xs_definition
         elif self.setup_mode == 'osc_const':
-            return m.sqrt((2*self.xs_definition*(self.eCharge*1e20))/self.mass_si)*self.hJ/self.eCharge
-        return (self.hJ**2/self.mass_si)*(self.xs_definition*1e20)/self.eCharge
+            return auxiliary.osc_const_to_vib_energy(self.xs_definition, self.mass)
+        return auxiliary.osc_para_to_vib_energy(self.xs_definition, self.mass) 
 
     @property
     def gs_vib_energy(self):
@@ -61,38 +54,36 @@ class dimer_system():
         if self.setup_mode == 'vib_energy':
             return self.gs_definition
         elif self.setup_mode == 'osc_const':
-            return m.sqrt((2*self.gs_definition*(self.eCharge*1e20))/self.mass_si)*self.hJ/self.eCharge
-        return (self.hJ**2/self.mass_si)*(self.xs_definition*1e20)/self.eCharge
+            return auxiliary.osc_const_to_vib_energy(self.gs_definition, self.mass) 
+        return auxiliary.osc_para_to_vib_energy(self.gs_definition, self.mass) 
 
     @property
     def xs_potential(self):
         """excited state oscillator constant in eV/angstrom**2"""
         if self.setup_mode == 'osc_const':
             return self.xs_definition
-        else:
-            return self.mass_si/(2*self.hJ**2)*(self.xs_vib_energy*self.eCharge)**2*(1e-20/self.eCharge)
+        return auxiliary.vib_energy_to_osc_const(self.xs_vib_energy, self.mass)
 
     @property
     def gs_potential(self):
         """excited state oscillator constant in eV/angstrom**2"""
         if self.setup_mode == 'osc_const':
             return self.gs_definition
-        else:
-            return self.mass_si/(2*self.hJ**2)*(self.gs_vib_energy*self.eCharge)**2*(1e-20/self.eCharge)
+        return auxiliary.vib_energy_to_osc_const(self.gs_vib_energy, self.mass)
 
     @property
     def xs_parameter(self):
         """oscillator parameter of excited state quantum-mechanical oscillator in 1/Angstrom**2 (alpha in manuscript)"""
         if self.setup_mode == 'osc_para':
             return self.xs_definition
-        return (self.mass_si/self.hJ**2)*(self.xs_vib_energy*self.eCharge)*1e-20
+        return auxiliary.vib_energy_to_osc_para(self.xs_vib_energy, self.mass)
 
     @property
     def gs_parameter(self):
         """oscillator parameter of excited state quantum-mechanical oscillator in 1/Angstrom**2 (alpha in manuscript)"""
         if self.setup_mode == 'osc_para':
             return self.gs_definition        
-        return (self.mass_si/self.hJ**2)*(self.gs_vib_energy*self.eCharge)*1e-20
+        return auxiliary.vib_energy_to_osc_para(self.gs_vib_energy, self.mass)
     
 def semiclassical_emission(E, temp, dimer):
     """Calculates and returns a semiclassical emission spectrum for a dimer system at a given temperature or list a of temperatures. The first six vibrational levels of the excited state are taken into account. 
@@ -142,11 +133,8 @@ def semiclassical_emission(E, temp, dimer):
         mass = dimer[4]*1.66054e-27
         
         #calculate vibrational energy from oscillator constant
-        hJ = 1.0456e-34 # hbar in J/s
-        eCharge = 1.6022e-19 # elementary charge 
+        xs_vib_energy =  auxiliary.osc_para_to_vib_energy(xs_parameter, dimer[4])
 
-        xs_vib_energy =  (hJ**2/mass)*(xs_parameter*1e20)/eCharge
-    
     
     if type(temp) is list:
         list_flag = True
@@ -154,7 +142,7 @@ def semiclassical_emission(E, temp, dimer):
         temp = [temp]
         list_flag = False
     
-    boltzmann_dist = auxiliary.boltzmann_distribution(temp, 0.5*dimer.xs_vib_energy)
+    boltzmann_dist = auxiliary.boltzmann_distribution(temp, 0.5*xs_vib_energy)
 
     out = dict()
     for T in temp:

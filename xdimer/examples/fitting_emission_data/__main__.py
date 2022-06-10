@@ -1,11 +1,14 @@
-import xdimer
 import numpy as np
 import math as m
 from scipy.optimize import least_squares
 from matplotlib import pyplot as plt
 
-if __name__ == '__main__':
-    
+import xdimer
+
+
+
+def main():
+       
     ### generating data set
 
     # setting up a dimer system with reduced mass 500 u, a ground state with vibrational energy quantum of 25 meV and an excited state at De= 1.47 eV and q_e= 0.09 with a vibrational energy quantum of 20 meV.
@@ -44,8 +47,8 @@ if __name__ == '__main__':
 
     ### Plotting data
     energy_axis = np.linspace(1,2, num=1000)
-    figure = plt.figure(figsize= (8,8))
-    figure.suptitle(f'Fit results: \n Ex,vib = {round(dimer_fitted.xs_vib_energy*1e3,1)} meV, Eg,vib = {round(dimer_fitted.gs_vib_energy*1e3,1)} meV, De = {round(dimer_fitted.e_offset,2)} eV, sigma = {round(dimer_fitted.energetic_broadening*1e3,1)} meV')
+    figure = plt.figure(figsize= (8,8), tight_layout = True)
+    figure.suptitle(f'Fit results: \n Ex,vib = {round(dimer_fitted.xs_vib_energy*1e3,1)} meV, Eg,vib = {round(dimer_fitted.gs_vib_energy*1e3,1)} meV, De = {round(dimer_fitted.e_offset,2)} eV, qe = {round(dimer_fitted.q_xs,2)} A, sigma = {round(dimer_fitted.energetic_broadening*1e3,1)} meV')
     ax = figure.subplots(2,2).flatten()
     ymax = data_set[min(temperatures)][1].max() + 0.15*data_set[min(temperatures)][1].max() 
     for idx, T in enumerate(temperatures):
@@ -62,5 +65,12 @@ if __name__ == '__main__':
         ax[idx].plot(energy_axis,  xdimer.quantummechanical_emission(energy_axis, T, dimer_fitted)[0][4], label = '3-th vib.' ,color = colors_plot[4], linewidth = 2, zorder = 9 )
         ax[idx].bar(xdimer.quantummechanical_emission(energy_axis, T, dimer_fitted)[1][3][1], xdimer.quantummechanical_emission(energy_axis, T, dimer_fitted)[1][3][2]/m.sqrt(2*m.pi*dimer_fitted.energetic_broadening**2), width= 0.01, color = colors_plot[4], zorder= 10)
         ax[idx].set_title(f'T = {T} K')
+        ax[idx].set_xlabel('Energy [eV]')
     ax[1].legend(loc= 'upper right')
     plt.show()
+
+
+if __name__ == '__main__':
+    print('Setting up model dimer')
+    print('mass = 400 u, Ex,vib = 23 meV, Eg,vib = 27 meV, De = 1.55 eV, qe = 0.08 A, sigma = 19 meV')
+    main()

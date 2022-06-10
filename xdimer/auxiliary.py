@@ -1,6 +1,66 @@
 import math as m
 import numpy as np
 
+def osc_para_to_vib_energy(osc_para, mass):
+    """Transforms oscillator parameter to vibrational energy quantum.
+
+    Args:
+        osc_para (float): oscillator parameter in 1/Angstrom^2
+        mass (float): reduced mass in atomic units
+
+    Returns:
+        float: vibrational energy quantum in eV
+    """
+    hJ = 1.0456e-34
+    eCharge = 1.6022e-19
+    mass_si = mass*1.66054e-27 
+    return (hJ**2/mass_si)*(osc_para*1e20)/eCharge
+
+def vib_energy_to_osc_para(vib_energy, mass):
+    """Transforms vibrational energy quantum to oscillator parameter
+
+    Args:
+        vib_energy (float): vibrational energy quantum in eV
+        mass (float): reduced mass in atomic units
+
+    Returns:
+        float: oscillator parameter in 1/Angstrom^2
+    """
+    hJ = 1.0456e-34
+    eCharge = 1.6022e-19
+    mass_si = mass*1.66054e-27
+    return (mass_si/hJ**2)*(vib_energy*eCharge)*1e-20
+
+def osc_const_to_vib_energy(osc_const, mass):
+    """Transforms oscillator constant to vibrational energy quantum.
+
+    Args:
+        osc_const (float): 
+        mass (float): reduced mass in atomic units
+
+    Returns:
+        float: vibrational energy quantum in eV
+    """
+    hJ = 1.0456e-34
+    eCharge = 1.6022e-19
+    mass_si = mass*1.66054e-27
+    return m.sqrt((2*osc_const*(eCharge*1e20))/mass_si)*hJ/eCharge
+
+def vib_energy_to_osc_const(vib_energy, mass):
+    """Transforms vibrational energy quantum to oscillator constant
+
+    Args:
+        vib_energy (float): vibrational energy quantum in eV
+        mass (float): reduced mass in atomic units
+
+    Returns:
+        float: oscillator constant in eV/Angstrom^2
+    """
+    hJ = 1.0456e-34
+    eCharge = 1.6022e-19
+    mass_si = mass*1.66054e-27
+    return mass_si/(2*hJ**2)*(vib_energy*eCharge)**2*(1e-20/eCharge)
+
 def boltzmann_distribution(Temp_list, vib_zero_point_energy, no_of_states= 50):
     """
     Generates a Boltzmann probability distribution for a quantum-mechanical harmonic oscillator with zero point energy "vib_zero_point_energy"

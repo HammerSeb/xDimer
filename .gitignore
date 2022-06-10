@@ -3,3 +3,8 @@
 
 #ingone vscode debugging json
 **/.vscode
+
+#ingone testing venv
+**/testing
+**/XDimer.egg-info
+**/__pycache__
