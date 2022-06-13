@@ -12,5 +12,6 @@ setup(name='XDimer',
       url='https://github.com/HammerSeb/xDimer',
       packages= find_packages(),
       install_requires=['numpy', 'scipy', 'matplotlib'],
+      python_requires='>=3',
       include_package_data = True
      )
