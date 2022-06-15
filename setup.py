@@ -2,7 +2,7 @@ from gettext import find
 from setuptools import setup, find_packages
 
 setup(name='XDimer',
-      version='1.0.2',
+      version='1.0.3',
       description='Simulation of multi-molecular emission spectra dominated by intermolecular vibrations ',
       long_description=open('README.md').read(),
       long_description_content_type ='text/markdown' ,
@@ -12,6 +12,6 @@ setup(name='XDimer',
       url='https://github.com/HammerSeb/xDimer',
       packages= find_packages(),
       install_requires=['numpy', 'scipy', 'matplotlib'],
-      python_requires='>=3',
+      python_requires='>=3.6',
       include_package_data = True
      )
