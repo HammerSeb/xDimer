@@ -1,6 +1,6 @@
 # xDimers
 
-Pyhton package for simulating multi-molecular emission spectra dominated by a single effective intermolecular vibrational mode. This package accompanies the publication in ...
+Pyhton package for simulating multi-molecular emission spectra dominated by a single effective intermolecular vibrational mode. This package will be accompanying a future publication.
 
 ## Table of contents
 1. [Installation](#1-installation)
