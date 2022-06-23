@@ -17,9 +17,9 @@ Pyhton package for simulating multi-molecular emission spectra dominated by a si
 4. [License and citation](#4-license-and-citation)
 
 ## 1. Installation
-Install package from TestPyPi with
+Install package from PyPi with
 ```
-python -m pip install -i https://test.pypi.org/simple/ XDimer
+pip install XDimer
 ```
 
 The latest development version is available on GitHub. To install use:
