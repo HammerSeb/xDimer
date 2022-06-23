@@ -636,4 +636,4 @@ Package distributed under MIT license. Copyright (c) 2022 Sebastian Hammer.
 
 ### Citation
 
-If you use this package or its contents for apublication please consider citing the zendoo archive [![DOI](https://zenodo.org/badge/465952131.svg)](https://zenodo.org/badge/latestdoi/465952131) or the corresponding publication.
+If you use this package or its contents for apublication please consider citing the zenodo archive [![DOI](https://zenodo.org/badge/465952131.svg)](https://zenodo.org/badge/latestdoi/465952131) or the corresponding publication.
