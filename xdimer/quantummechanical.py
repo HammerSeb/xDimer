@@ -41,7 +41,7 @@ def franck_condon_factor(level, xs_parameter, gs_parameter, q_xs, e_offset, mass
                  [2,:]: Floats:         value of Frank-Condon factor of transition n --> k
     """
     # Definitions 
-    hJ = 1.0456e-34 # hbar in J/s
+    hJ = 1.0546e-34 # hbar in J/s
     eCharge = 1.6022e-19 # elementary charge 
     
     # initialize spatial integration range

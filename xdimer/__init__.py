@@ -222,7 +222,7 @@ def quantummechanical_emission(E, temp, dimer, simulation_parameters = [5, -.5, 
         mass = dimer[5]*1.66054e-27
         
         #calculate vibrational energy from oscillator constant
-        hJ = 1.0456e-34 # hbar in J/s
+        hJ = 1.0546e-34 # hbar in J/s
         eCharge = 1.6022e-19 # elementary charge 
 
         xs_vib_energy =  (hJ**2/mass)*(xs_parameter*1e20)/eCharge
