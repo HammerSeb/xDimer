@@ -1,10 +1,19 @@
 # xDimers
 
-Pyhton package for simulating multi-molecular emission spectra dominated by a single effective intermolecular vibrational mode. This package will be accompanying a future publication and is available at Zenodo. 
+Pyhton package for simulating multi-molecular emission spectra dominated by a single effective intermolecular vibrational mode. This package is accompanying a publication and is available at Zenodo. 
 
 Zenodo:
 
 [![DOI](https://zenodo.org/badge/465952131.svg)](https://zenodo.org/badge/latestdoi/465952131)
+
+Publication: 
+
+S. Hammer et al, "Spectroscopic analysis of vibrational coupling in multi-molecular excited states", *Material Horizons*, 2023, **10**, 221-234
+
+[https://doi.org/10.1039/D2MH00829G](https://doi.org/10.1039/D2MH00829G)
+
+
+
 
 ## Table of contents
 1. [Installation](#1-installation)
@@ -636,4 +645,5 @@ Package distributed under MIT license. Copyright (c) 2022 Sebastian Hammer.
 
 ### Citation
 
-If you use this package or its contents for apublication please consider citing the zenodo archive [![DOI](https://zenodo.org/badge/465952131.svg)](https://zenodo.org/badge/latestdoi/465952131) or the corresponding publication.
+If you use this package or its contents for apublication please consider citing the zenodo archive [![DOI](https://zenodo.org/badge/465952131.svg)](https://zenodo.org/badge/latestdoi/465952131) or the [corresponding publication](https://doi.org/10.1039/D2MH00829G)
+.
